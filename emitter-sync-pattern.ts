@@ -70,24 +70,12 @@ class EventHandler extends EventStatistics<EventName> {
       emitter.subscribe(eventName, this.handleEvent(eventName));
     });
 
-    this.intervalRequest = setInterval(this.throttle(() => this.syncWithRepository(), 1000))
+    this.intervalRequest = setInterval(() => this.syncWithRepository(), 1000)
   }
 
   private handleEvent(eventName: EventName) {
     return () => {
       this.setStats(eventName, this.getStats(eventName) + 1);
-    };
-  }
-
-  private throttle<T extends (...args: any[]) => void>(callback: T, time: number): (...args: Parameters<T>) => void {
-    let lastCall = 0;
-    
-    return (...args: Parameters<T>) => {
-      const now = Date.now();
-      if (now - lastCall >= time) {
-        lastCall = now;
-        callback(...args);
-      }
     };
   }
 
